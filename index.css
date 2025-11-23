@@ -1,0 +1,12 @@
+.box {
+    background-color: lightblue;
+    border: 2px solid blue;
+    padding: 10px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
