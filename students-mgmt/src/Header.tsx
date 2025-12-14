@@ -1,7 +1,14 @@
+import { AppBar, Toolbar, Typography } from '@mui/material'
 import React from 'react'
 
 export default function Header() {
   return (
-    <div>Header</div>
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h6" component="div">
+          Students Management
+        </Typography>
+      </Toolbar>
+    </AppBar>
   )
 }
