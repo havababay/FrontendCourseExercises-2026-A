@@ -1,3 +1,5 @@
+import { Typography } from "@mui/material";
+
 interface TitleProps {
   text: string;
   level?: 1 | 2 | 3 | 4 | 5 | 6;
@@ -6,12 +8,12 @@ interface TitleProps {
 function Title({ text, level}: TitleProps) {
   return (
     <>
-      {(level ?? 1) === 1 && <h1>{text}</h1>}
-      {level === 2 && <h2>{text}</h2>}
-      {level === 3 && <h3>{text}</h3>}
-      {level === 4 && <h4>{text}</h4>}
-      {level === 5 && <h5>{text}</h5>}
-      {level === 6 && <h6>{text}</h6>}
+      {(level ?? 1) === 1 && <Typography variant="h1">{text}</Typography>}
+      {level === 2 && <Typography variant="h2">{text}</Typography>}
+      {level === 3 && <Typography variant="h3">{text}</Typography>}
+      {level === 4 && <Typography variant="h4">{text}</Typography>}
+      {level === 5 && <Typography variant="h5">{text}</Typography>}
+      {level === 6 && <Typography variant="h6">{text}</Typography>}
     </>
   );
 }

@@ -33,7 +33,7 @@ function CandidatesList() {
   return (
     <div className="candidates-list">
       <Title text="Candidates" level={2} />
-      <Button variant="contained" sx={{ mt: 2 }} onClick={() => navigate('/candidates/new')}>
+      <Button variant="contained" sx={{ mt: 2 }} onClick={() => navigate('/candidates/new')} color="primary">
         Add Candidate
       </Button>
 
@@ -52,6 +52,14 @@ function CandidatesList() {
                   {candidate.name}
                 </TableCell>
                 <TableCell>{candidate.email}</TableCell>
+                <TableCell>
+                  <Button
+                       variant="outlined"
+                    onClick={() => navigate(`/candidates/${candidate.id}`)}
+                  >
+                    Edit
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

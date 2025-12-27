@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Title from "./Title";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -18,6 +18,24 @@ function CandidateForm() {
   const [errors, setErrors] = useState<FormFieldsIndicator>({});
 
   const navigate = useNavigate();
+
+  const { id : candidateId } = useParams();
+
+  useEffect(() => {
+    if (candidateId) {
+        const candidatesFromStorage = localStorage.getItem("candidates");
+        if (candidatesFromStorage) {
+            const candidates = JSON.parse(candidatesFromStorage);
+            const candidate = candidates.find((c: any) => c.id === Number(candidateId));
+            if (candidate) {
+                setName(candidate.name);
+                setEmail(candidate.email);
+                setId(candidate.id);
+            }
+        }
+    }
+  }, [candidateId]);
+
 
   const isFormValid = useMemo(() => {
     const vals = Object.values(errors);
@@ -52,7 +70,7 @@ function CandidateForm() {
           display: "flex",
           flexDirection: "column",
           gap: 2,
-          maxWidth: 400,
+          width : {xs: '100%', md: '50%', lg: '30%'}
         }}
       >
           <TextField

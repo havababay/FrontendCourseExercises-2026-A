@@ -22,6 +22,7 @@ function App() {
         <Route path="/counter" element={<Counter />} />
         <Route path="/candidates" element={<CandidatesList />} />
         <Route path="/candidates/new" element={<CandidateForm />} />
+        <Route path="/candidates/:id" element={<CandidateForm />} />
       </Routes>
       <Footer />
     </>
