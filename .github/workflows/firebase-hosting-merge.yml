@@ -20,6 +20,8 @@ jobs:
         run: npm run build
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
         with:
           entryPoint: students-mgmt
           repoToken: ${{ secrets.GITHUB_TOKEN }}
