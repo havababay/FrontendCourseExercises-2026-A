@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { createTheme, responsiveFontSizes, ThemeProvider } from "@mui/material";
-import { cyan, grey, red } from "@mui/material/colors";
+import { cyan, grey } from "@mui/material/colors";
 
 let theme = createTheme({
   colorSchemes: {

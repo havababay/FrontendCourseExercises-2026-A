@@ -1,5 +1,4 @@
 import { AppBar, FormControl, InputLabel, MenuItem, Select, Toolbar, Typography, useColorScheme } from '@mui/material'
-import React from 'react'
 
 export default function Header() {
   const { mode, setMode } = useColorScheme();

@@ -20,7 +20,7 @@ interface Candidate {
 
 function CandidatesList() {
   const navigate = useNavigate();
-  const [candidates, setCandidates] = useState([]);
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
 
   useEffect(() => {
     const candidatesFromStorage = localStorage.getItem("candidates");
