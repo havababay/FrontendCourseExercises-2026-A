@@ -1,9 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Title from "./Title";
+import Title from "../Title";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import {
+  addCandidate,
+  getCandidate,
+  updateCandidate,
+} from "../../firebase/candidate";
+import { Candidate } from "./candidate";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface FormFieldsIndicator {
   name?: boolean;
@@ -13,28 +20,28 @@ interface FormFieldsIndicator {
 function CandidateForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [id, setId] = useState(new Date().getTime());
   const [errors, setErrors] = useState<FormFieldsIndicator>({});
+  const [loading, setLoading] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
 
   const navigate = useNavigate();
 
-  const { id : candidateId } = useParams();
+  const { id: candidateId } = useParams();
 
   useEffect(() => {
     if (candidateId) {
-        const candidatesFromStorage = localStorage.getItem("candidates");
-        if (candidatesFromStorage) {
-            const candidates = JSON.parse(candidatesFromStorage);
-            const candidate = candidates.find((c: any) => c.id === Number(candidateId));
-            if (candidate) {
-                setName(candidate.name);
-                setEmail(candidate.email);
-                setId(candidate.id);
-            }
+      setLoading(true);
+      getCandidate(candidateId).then((candidate) => {
+        if (candidate) {
+          setName(candidate.name);
+          setEmail(candidate.email);
+        } else {
+          setIsInvalid(true);
         }
+        setLoading(false);
+      });
     }
   }, [candidateId]);
-
 
   const isFormValid = useMemo(() => {
     const vals = Object.values(errors);
@@ -46,17 +53,29 @@ function CandidateForm() {
     e.preventDefault();
 
     // For now we just log the values; in a real app you'd send them to a backend.
-    const newCandidate = { id, name, email };
-    const candidatesFromStorage = localStorage.getItem("candidates");
-    const candidates = candidatesFromStorage
-      ? JSON.parse(candidatesFromStorage)
-      : [];
-    candidates.push(newCandidate);
-    localStorage.setItem("candidates", JSON.stringify(candidates));
-    navigate("/candidates");
+    const newCandidate = new Candidate(name, email, "");
+    setLoading(true);
+    if (candidateId) {
+      updateCandidate(new Candidate(name, email, candidateId)).then(() => {
+        setLoading(false);
+        navigate("/candidates");
+      });
+    } else {
+      addCandidate(newCandidate).then(() => {
+        setLoading(false);
+        navigate("/candidates");
+      });
+    }
+    console.log("Submitted candidate:", newCandidate);
   }
 
-  return (
+  return loading ? (
+    <Box sx={{ display: "flex" }}>
+      <CircularProgress />
+    </Box>
+  ) : isInvalid ? (
+    <div>Candidate not found</div>
+  ) : (
     <div>
       <Title text="Add Candidate" level={2} />
       <Box
@@ -69,33 +88,24 @@ function CandidateForm() {
           display: "flex",
           flexDirection: "column",
           gap: 2,
-          width : {xs: '100%', md: '50%', lg: '30%'}
+          width: { xs: "100%", md: "50%", lg: "30%" },
         }}
       >
-          <TextField
-            label="ID"
-            name="id"
-            value={id}
-            onChange={(e) => setId(Number(e.target.value))}
-            required
-            type="number"
-            disabled
-          ></TextField>
-          <TextField
-            label="Name"
-            name="name"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-              setErrors((prev) => ({
-                ...prev,
-                name: !e.target.validity.valid,
-              }));
-            }}
-            required
-            error={errors.name}
-            helperText={errors.name ? "Name is required" : ""}
-          />
+        <TextField
+          label="Name"
+          name="name"
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+            setErrors((prev) => ({
+              ...prev,
+              name: !e.target.validity.valid,
+            }));
+          }}
+          required
+          error={errors.name}
+          helperText={errors.name ? "Name is required" : ""}
+        />
         <TextField
           label="Email"
           name="email"
