@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
+import "./Counter.css";
+import { useMediaQuery, useTheme } from "@mui/material";
+import Title from "./Title";
 
 function Counter() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [count, setCount] = useState(0);
   useEffect(() => {
     console.log("Effect: Count has changed: " + count);
@@ -15,21 +21,17 @@ function Counter() {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "10px",
-        margin: "20px 0",
-      }}
-    >
-      <div>Count: {count}</div>
-      <div>
-        <button onClick={increment} style={{ marginRight: "10px" }}>
+    <div className="counter">
+     {isMobile ? "mobile" : "desktop"}
+      <div className="counter-value">
+       <Title text={`Count: ${count}`} level={1}></Title>
+      </div>
+      <div className="counter-buttons">
+        <button className="counter-btn" onClick={increment}>
           Increment
         </button>
         <button
+          className="counter-btn"
           onClick={() => {
             setCount(count - 1);
             console.log("Decrement button clicked: " + (count - 1));
